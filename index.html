@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Финиковый Двор — отборные финики с доставкой</title>
+  <meta name="description" content="Финиковый Двор — интернет-магазин отборных фиников. Меджул, Аджва, Сафави и другие сорта с доставкой.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#" class="logo">🌴 Финиковый <span>Двор</span></a>
+      <nav class="nav">
+        <a href="#catalog">Каталог</a>
+        <a href="#about">О нас</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+      <button class="cart-btn" id="cartBtn" aria-label="Открыть корзину">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span>Корзина</span>
+        <span class="cart-btn__count" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__text">
+        <h1>Отборные финики<br>прямо к вашему столу</h1>
+        <p>Натуральная сладость без сахара. Меджул, Аджва, Сафави и другие сорта — свежие поставки каждую неделю.</p>
+        <a href="#catalog" class="btn btn--primary btn--lg">Смотреть каталог</a>
+      </div>
+      <div class="hero__art" aria-hidden="true">🌴</div>
+    </div>
+  </section>
+
+  <main class="container catalog" id="catalog">
+    <h2 class="section-title">Каталог</h2>
+    <div class="products" id="products"></div>
+  </main>
+
+  <section class="about" id="about">
+    <div class="container">
+      <h2 class="section-title">О нас</h2>
+      <p>«Финиковый Двор» поставляет финики напрямую от лучших производителей Ближнего Востока и Северной Африки. Каждая партия проходит ручной отбор — к вам попадает только свежий и качественный продукт.</p>
+    </div>
+  </section>
+
+  <footer class="footer" id="contacts">
+    <div class="container footer__inner">
+      <p><strong>Финиковый Двор</strong> © 2026</p>
+      <p>Оформите заказ через корзину — мы свяжемся с вами для подтверждения.</p>
+    </div>
+  </footer>
+
+  <!-- Корзина -->
+  <div class="cart-overlay" id="cartOverlay" hidden></div>
+  <aside class="cart" id="cart" aria-label="Корзина">
+    <div class="cart__header">
+      <h3>Ваша корзина</h3>
+      <button class="cart__close" id="cartClose" aria-label="Закрыть корзину">✕</button>
+    </div>
+    <div class="cart__items" id="cartItems"></div>
+    <div class="cart__footer">
+      <div class="cart__total">Итого: <span id="cartTotal">0 ₽</span></div>
+      <form id="orderForm" class="order-form">
+        <input type="text" id="customerName" placeholder="Ваше имя" required autocomplete="name">
+        <input type="tel" id="customerPhone" placeholder="Телефон" required autocomplete="tel">
+        <textarea id="customerComment" placeholder="Комментарий к заказу (необязательно)" rows="2"></textarea>
+        <button type="submit" class="btn btn--primary" id="submitOrderBtn">Оформить заказ</button>
+      </form>
+      <p class="order-status" id="orderStatus" role="status"></p>
+    </div>
+  </aside>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "finikovy-dvor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Финиковый Двор — витрина фиников с корзиной и заказом в Telegram",
+  "scripts": {
+    "dev": "npx --yes serve -l 3210 ."
+  }
+}
