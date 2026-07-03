@@ -1,6 +1,6 @@
 // Рендер каталога, корзины и оформление заказа.
 
-const fmt = (n) => n.toLocaleString("ru-RU") + " ₽";
+const fmt = (n) => n.toLocaleString("ru-RU") + " ₸";
 
 // ---------- Каталог ----------
 function renderProducts() {
