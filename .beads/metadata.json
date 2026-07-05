@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "finikovy_dvor",
+  "project_id": "46e2d02e-417d-403f-8ccc-1df425b6fe53"
+}
