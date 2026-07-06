@@ -1,4 +1,4 @@
-// Товары магазина. Чтобы изменить ассортимент — редактируйте только этот файл.
+﻿// Товары магазина. Чтобы изменить ассортимент — редактируйте только этот файл.
 // image: путь к фото (положите файл в /images и укажите "images/имя.jpg").
 // Если image пустой — карточка покажет красивую заглушку с эмодзи.
 const PRODUCTS = [
@@ -8,7 +8,7 @@ const PRODUCTS = [
     description: "Крупные, мягкие, карамельно-сладкие. Иордания.",
     price: 6900,
     unit: "500 г",
-    image: "",
+    image: "images/medjool.jpg",
     emoji: "👑",
   },
   {
@@ -17,7 +17,7 @@ const PRODUCTS = [
     description: "Тёмные, нежные, с шоколадными нотами. Саудовская Аравия.",
     price: 4500,
     unit: "500 г",
-    image: "",
+    image: "images/safawi.jpg",
     emoji: "🍫",
   },
   {
@@ -26,7 +26,7 @@ const PRODUCTS = [
     description: "Премиальный сорт из Медины. Мягкие и ароматные.",
     price: 8500,
     unit: "500 г",
-    image: "",
+    image: "images/ajwa.jpg",
     emoji: "✨",
   },
   {
@@ -35,7 +35,7 @@ const PRODUCTS = [
     description: "Мягкие, с медовой сладостью. Саудовская Аравия.",
     price: 4900,
     unit: "500 г",
-    image: "",
+    image: "images/sukkari-mufattal.jpg",
     emoji: "🍯",
   },
   {
@@ -44,7 +44,7 @@ const PRODUCTS = [
     description: "Свежие и сочные, тают во рту. Саудовская Аравия.",
     price: 5500,
     unit: "500 г",
-    image: "",
+    image: "images/sukkari-rutab.jpg",
     emoji: "🌟",
   },
   {
@@ -53,7 +53,7 @@ const PRODUCTS = [
     description: "Бельгийский тёмный шоколад, вручную.",
     price: 5900,
     unit: "300 г",
-    image: "",
+    image: "images/choco.jpg",
     emoji: "🎁",
   },
   {
@@ -62,7 +62,7 @@ const PRODUCTS = [
     description: "Ассорти из 4 сортов в подарочной коробке.",
     price: 14900,
     unit: "1 кг",
-    image: "",
+    image: "images/gift.jpg",
     emoji: "🌴",
   },
 ];
