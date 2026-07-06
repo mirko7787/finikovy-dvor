@@ -50,6 +50,8 @@ function renderCart() {
 
   document.getElementById("cartTotal").textContent = fmt(Cart.totalPrice());
   document.getElementById("cartCount").textContent = Cart.totalCount();
+  const fabCount = document.getElementById("fabCartCount");
+  if (fabCount) fabCount.textContent = Cart.totalCount();
   document.getElementById("submitOrderBtn").disabled = entries.length === 0;
 }
 
@@ -138,6 +140,7 @@ document.addEventListener("click", (e) => {
 });
 
 document.getElementById("cartBtn").addEventListener("click", openCart);
+document.getElementById("fabCart").addEventListener("click", openCart);
 document.getElementById("cartClose").addEventListener("click", closeCart);
 document.getElementById("cartOverlay").addEventListener("click", closeCart);
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCart(); });
