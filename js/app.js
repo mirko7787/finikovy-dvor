@@ -3,9 +3,8 @@
 const fmt = (n) => n.toLocaleString("ru-RU") + " ₸";
 
 // ---------- Каталог ----------
-function renderProducts() {
-  const grid = document.getElementById("products");
-  grid.innerHTML = PRODUCTS.map((p) => `
+function cardHTML(p) {
+  return `
     <article class="card">
       <div class="card__img">${p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : p.emoji}</div>
       <div class="card__body">
@@ -19,8 +18,26 @@ function renderProducts() {
           <button class="card__add" data-add="${p.id}">В корзину</button>
         </div>
       </div>
-    </article>
-  `).join("");
+    </article>`;
+}
+
+function renderProducts() {
+  const root = document.getElementById("products");
+  // Порядок разделов из CATEGORIES; товары без известной категории уходят в конец.
+  const order = (typeof CATEGORIES !== "undefined" && CATEGORIES) || [];
+  const groups = [...new Set([...order, ...PRODUCTS.map((p) => p.category || "Прочее")])];
+
+  root.innerHTML = groups
+    .map((cat) => {
+      const items = PRODUCTS.filter((p) => (p.category || "Прочее") === cat);
+      if (items.length === 0) return "";
+      return `
+        <section class="catalog-group">
+          <h3 class="catalog-group__title">${cat}</h3>
+          <div class="products-grid">${items.map(cardHTML).join("")}</div>
+        </section>`;
+    })
+    .join("");
 }
 
 // ---------- Корзина ----------

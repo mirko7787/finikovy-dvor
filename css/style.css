@@ -343,7 +343,16 @@ h1, h2, h3 {
   margin-bottom: 40px;
 }
 
-.products {
+.catalog-group + .catalog-group { margin-top: 56px; }
+
+.catalog-group__title {
+  font-size: clamp(24px, 2.6vw, 32px);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-ash);
+}
+
+.products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;

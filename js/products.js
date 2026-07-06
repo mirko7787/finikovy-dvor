@@ -1,6 +1,10 @@
-﻿// Товары магазина. Чтобы изменить ассортимент — редактируйте только этот файл.
+// Товары магазина. Чтобы изменить ассортимент — редактируйте только этот файл.
 // image: путь к фото (положите файл в /images и укажите "images/имя.jpg").
 // Если image пустой — карточка покажет красивую заглушку с эмодзи.
+// category: раздел каталога. Товары группируются по этому полю в порядке CATEGORIES ниже.
+// ⚠️ Цены — плейсхолдеры. Замените на реальные.
+const CATEGORIES = ["Финики", "Карак чай и напитки"];
+
 const PRODUCTS = [
   {
     id: 1,
@@ -8,6 +12,7 @@ const PRODUCTS = [
     description: "Крупные, мягкие, карамельно-сладкие. Иордания.",
     price: 6900,
     unit: "500 г",
+    category: "Финики",
     image: "images/medjool.jpg",
     emoji: "👑",
   },
@@ -17,6 +22,7 @@ const PRODUCTS = [
     description: "Тёмные, нежные, с шоколадными нотами. Саудовская Аравия.",
     price: 4500,
     unit: "500 г",
+    category: "Финики",
     image: "images/safawi.jpg",
     emoji: "🍫",
   },
@@ -26,6 +32,7 @@ const PRODUCTS = [
     description: "Премиальный сорт из Медины. Мягкие и ароматные.",
     price: 8500,
     unit: "500 г",
+    category: "Финики",
     image: "images/ajwa.jpg",
     emoji: "✨",
   },
@@ -35,6 +42,7 @@ const PRODUCTS = [
     description: "Мягкие, с медовой сладостью. Саудовская Аравия.",
     price: 4900,
     unit: "500 г",
+    category: "Финики",
     image: "images/sukkari-mufattal.jpg",
     emoji: "🍯",
   },
@@ -44,6 +52,7 @@ const PRODUCTS = [
     description: "Свежие и сочные, тают во рту. Саудовская Аравия.",
     price: 5500,
     unit: "500 г",
+    category: "Финики",
     image: "images/sukkari-rutab.jpg",
     emoji: "🌟",
   },
@@ -53,6 +62,7 @@ const PRODUCTS = [
     description: "Бельгийский тёмный шоколад, вручную.",
     price: 5900,
     unit: "300 г",
+    category: "Финики",
     image: "images/choco.jpg",
     emoji: "🎁",
   },
@@ -62,7 +72,38 @@ const PRODUCTS = [
     description: "Ассорти из 4 сортов в подарочной коробке.",
     price: 14900,
     unit: "1 кг",
+    category: "Финики",
     image: "images/gift.jpg",
     emoji: "🌴",
+  },
+  {
+    id: 8,
+    name: "Карак чай классический",
+    description: "Крепкий чёрный чай со специями и сгущённым молоком по-восточному.",
+    price: 3200,
+    unit: "6 порций",
+    category: "Карак чай и напитки",
+    image: "images/karak.jpg",
+    emoji: "🫖",
+  },
+  {
+    id: 9,
+    name: "Масала чай",
+    description: "Чёрный чай с кардамоном, корицей, имбирём и бадьяном.",
+    price: 3500,
+    unit: "6 порций",
+    category: "Карак чай и напитки",
+    image: "images/masala.jpg",
+    emoji: "🌶️",
+  },
+  {
+    id: 10,
+    name: "Чай для карака (заварка)",
+    description: "Крепкий чёрный чай — основа для домашнего карака. Развесной.",
+    price: 2400,
+    unit: "200 г",
+    category: "Карак чай и напитки",
+    image: "images/tea.jpg",
+    emoji: "🍵",
   },
 ];
