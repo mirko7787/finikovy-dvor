@@ -2,11 +2,33 @@
 
 const fmt = (n) => n.toLocaleString("ru-RU") + " ₸";
 
+function pluralItems(n) {
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return "товар";
+  if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return "товара";
+  return "товаров";
+}
+
 // ---------- Каталог ----------
+function controlHTML(p) {
+  const qty = Cart.items[p.id] || 0;
+  if (qty > 0) {
+    return `<div class="stepper">
+      <button data-dec="${p.id}" aria-label="Убрать одну">−</button>
+      <span>${qty}</span>
+      <button data-inc="${p.id}" aria-label="Добавить одну">+</button>
+    </div>`;
+  }
+  return `<button class="card__add" data-add="${p.id}">В корзину</button>`;
+}
+
 function cardHTML(p) {
   return `
     <article class="card">
-      <div class="card__img">${p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : p.emoji}</div>
+      <div class="card__img" data-quick="${p.id}">
+        ${p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : `<span style="font-size:56px">${p.emoji}</span>`}
+        <button class="card__quick" data-quick="${p.id}">Подробнее</button>
+      </div>
       <div class="card__body">
         <h3 class="card__name">${p.name}</h3>
         <p class="card__desc">${p.description}</p>
@@ -15,7 +37,7 @@ function cardHTML(p) {
             <div class="card__price">${fmt(p.price)}</div>
             <div class="card__unit">${p.unit}</div>
           </div>
-          <button class="card__add" data-add="${p.id}">В корзину</button>
+          <div class="card__control" data-control="${p.id}">${controlHTML(p)}</div>
         </div>
       </div>
     </article>`;
@@ -23,7 +45,6 @@ function cardHTML(p) {
 
 function renderProducts() {
   const root = document.getElementById("products");
-  // Порядок разделов из CATEGORIES; товары без известной категории уходят в конец.
   const order = (typeof CATEGORIES !== "undefined" && CATEGORIES) || [];
   const groups = [...new Set([...order, ...PRODUCTS.map((p) => p.category || "Прочее")])];
 
@@ -32,12 +53,20 @@ function renderProducts() {
       const items = PRODUCTS.filter((p) => (p.category || "Прочее") === cat);
       if (items.length === 0) return "";
       return `
-        <section class="catalog-group">
+        <section class="catalog-group" data-cat="${cat}">
           <h3 class="catalog-group__title">${cat}</h3>
           <div class="products-grid">${items.map(cardHTML).join("")}</div>
         </section>`;
     })
     .join("");
+}
+
+// Обновляет только контролы (кнопка/степпер) без перезагрузки картинок.
+function updateControls() {
+  PRODUCTS.forEach((p) => {
+    const el = document.querySelector(`[data-control="${p.id}"]`);
+    if (el) el.innerHTML = controlHTML(p);
+  });
 }
 
 // ---------- Корзина ----------
@@ -50,7 +79,7 @@ function renderCart() {
   } else {
     itemsEl.innerHTML = entries.map(({ product, qty }) => `
       <div class="cart-item">
-        <div class="cart-item__emoji">${product.emoji}</div>
+        <div class="cart-item__emoji">${product.image ? `<img src="${product.image}" alt="">` : product.emoji}</div>
         <div class="cart-item__info">
           <div class="cart-item__name">${product.name}</div>
           <div class="cart-item__price">${fmt(product.price)} × ${qty} = ${fmt(product.price * qty)}</div>
@@ -60,16 +89,29 @@ function renderCart() {
           <span>${qty}</span>
           <button data-inc="${product.id}" aria-label="Добавить одну">+</button>
         </div>
-        <button class="cart-item__remove" data-remove="${product.id}" aria-label="Удалить">🗑</button>
+        <button class="cart-item__remove" data-remove="${product.id}" aria-label="Удалить">✕</button>
       </div>
     `).join("");
   }
 
-  document.getElementById("cartTotal").textContent = fmt(Cart.totalPrice());
-  document.getElementById("cartCount").textContent = Cart.totalCount();
+  const count = Cart.totalCount();
+  const total = Cart.totalPrice();
+  document.getElementById("cartTotal").textContent = fmt(total);
+  document.getElementById("cartCount").textContent = count;
   const fabCount = document.getElementById("fabCartCount");
-  if (fabCount) fabCount.textContent = Cart.totalCount();
+  if (fabCount) fabCount.textContent = count;
   document.getElementById("submitOrderBtn").disabled = entries.length === 0;
+
+  // Мобильная нижняя панель
+  const bar = document.getElementById("mobileBar");
+  if (bar) {
+    document.getElementById("mobileBarCount").textContent = `${count} ${pluralItems(count)}`;
+    document.getElementById("mobileBarTotal").textContent = fmt(total);
+    bar.hidden = count === 0;
+    document.body.classList.toggle("mobilebar-on", count > 0);
+  }
+
+  updateControls();
 }
 
 function openCart() {
@@ -88,10 +130,19 @@ function closeCart() {
   document.body.style.overflow = "";
 }
 
+// Публичные помощники (для quickview в widgets.js)
+function addToCart(id, opts = {}) {
+  Cart.add(Number(id));
+  renderCart();
+  const p = PRODUCTS.find((x) => x.id === Number(id));
+  if (!opts.silent) window.showToast?.(`${p ? p.name : "Товар"} — в корзине`);
+}
+window.addToCart = addToCart;
+window.openCart = openCart;
+
 // ---------- Заказ ----------
 async function submitOrder(event) {
   event.preventDefault();
-
   const statusEl = document.getElementById("orderStatus");
   const btn = document.getElementById("submitOrderBtn");
 
@@ -100,10 +151,7 @@ async function submitOrder(event) {
     phone: document.getElementById("customerPhone").value.trim(),
     comment: document.getElementById("customerComment").value.trim(),
     items: Cart.entries().map(({ product, qty }) => ({
-      name: product.name,
-      price: product.price,
-      qty,
-      sum: product.price * qty,
+      name: product.name, price: product.price, qty, sum: product.price * qty,
     })),
     total: Cart.totalPrice(),
   };
@@ -119,7 +167,6 @@ async function submitOrder(event) {
       body: JSON.stringify(order),
     });
     if (!res.ok) throw new Error("HTTP " + res.status);
-
     statusEl.className = "order-status order-status--ok";
     statusEl.textContent = "Заказ отправлен! Мы свяжемся с вами.";
     Cart.clear();
@@ -135,17 +182,8 @@ async function submitOrder(event) {
 // ---------- События ----------
 document.addEventListener("click", (e) => {
   const add = e.target.closest("[data-add]");
-  if (add) {
-    Cart.add(Number(add.dataset.add));
-    renderCart();
-    add.textContent = "Добавлено ✓";
-    add.classList.add("card__add--added");
-    setTimeout(() => {
-      add.textContent = "В корзину";
-      add.classList.remove("card__add--added");
-    }, 900);
-    return;
-  }
+  if (add) { addToCart(add.dataset.add); return; }
+
   const inc = e.target.closest("[data-inc]");
   if (inc) { Cart.add(Number(inc.dataset.inc)); renderCart(); return; }
 
@@ -158,6 +196,7 @@ document.addEventListener("click", (e) => {
 
 document.getElementById("cartBtn").addEventListener("click", openCart);
 document.getElementById("fabCart").addEventListener("click", openCart);
+document.getElementById("mobileBarBtn").addEventListener("click", openCart);
 document.getElementById("cartClose").addEventListener("click", closeCart);
 document.getElementById("cartOverlay").addEventListener("click", closeCart);
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCart(); });
