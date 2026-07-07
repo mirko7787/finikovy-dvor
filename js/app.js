@@ -45,6 +45,7 @@ function cardHTML(p) {
 
 function renderProducts() {
   const root = document.getElementById("products");
+  if (!root) return;
   const order = (typeof CATEGORIES !== "undefined" && CATEGORIES) || [];
   const groups = [...new Set([...order, ...PRODUCTS.map((p) => p.category || "Прочее")])];
 
@@ -72,6 +73,7 @@ function updateControls() {
 // ---------- Корзина ----------
 function renderCart() {
   const itemsEl = document.getElementById("cartItems");
+  if (!itemsEl) return;
   const entries = Cart.entries();
 
   if (entries.length === 0) {
@@ -96,11 +98,14 @@ function renderCart() {
 
   const count = Cart.totalCount();
   const total = Cart.totalPrice();
-  document.getElementById("cartTotal").textContent = fmt(total);
-  document.getElementById("cartCount").textContent = count;
+  const totalEl = document.getElementById("cartTotal");
+  if (totalEl) totalEl.textContent = fmt(total);
+  const countEl = document.getElementById("cartCount");
+  if (countEl) countEl.textContent = count;
   const fabCount = document.getElementById("fabCartCount");
   if (fabCount) fabCount.textContent = count;
-  document.getElementById("submitOrderBtn").disabled = entries.length === 0;
+  const submitBtn = document.getElementById("submitOrderBtn");
+  if (submitBtn) submitBtn.disabled = entries.length === 0;
 
   // Мобильная нижняя панель
   const bar = document.getElementById("mobileBar");
@@ -194,13 +199,15 @@ document.addEventListener("click", (e) => {
   if (rm) { Cart.remove(Number(rm.dataset.remove)); renderCart(); return; }
 });
 
-document.getElementById("cartBtn").addEventListener("click", openCart);
-document.getElementById("fabCart").addEventListener("click", openCart);
-document.getElementById("mobileBarBtn").addEventListener("click", openCart);
-document.getElementById("cartClose").addEventListener("click", closeCart);
-document.getElementById("cartOverlay").addEventListener("click", closeCart);
+// Устойчивое подключение: пропущенный элемент (например, из-за старого кэша HTML)
+// не должен ронять весь скрипт — используем optional chaining.
+document.getElementById("cartBtn")?.addEventListener("click", openCart);
+document.getElementById("fabCart")?.addEventListener("click", openCart);
+document.getElementById("mobileBarBtn")?.addEventListener("click", openCart);
+document.getElementById("cartClose")?.addEventListener("click", closeCart);
+document.getElementById("cartOverlay")?.addEventListener("click", closeCart);
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCart(); });
-document.getElementById("orderForm").addEventListener("submit", submitOrder);
+document.getElementById("orderForm")?.addEventListener("submit", submitOrder);
 
 // ---------- Старт ----------
 Cart.load();
