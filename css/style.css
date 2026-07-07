@@ -487,6 +487,7 @@ body:has(.cart.open) .fab-cart { display: none; }
 
 /* ---------- Quick view ---------- */
 .quickview { position: fixed; inset: 0; z-index: 110; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.quickview[hidden] { display: none; } /* критично: иначе прозрачная плёнка перехватывает все тапы */
 .quickview__overlay { position: absolute; inset: 0; background: rgba(28, 58, 19, 0.45); backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.25s; }
 .quickview.open .quickview__overlay { opacity: 1; }
 .quickview__panel {
